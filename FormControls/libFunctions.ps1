@@ -13,20 +13,39 @@
     Import-Module -Name $importModule -Force
 }
 #>
-function PseduoValue {
+function GeneralValue {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $false)]
-        [ePseduoValue] $PseduoValue = "guid"
+        [eGeneralValue] $GeneralValue = [eGeneralValue]::guid,
+        [Parameter(Mandatory = $false)]
+        [decimal] $Floor = 0,
+        [Parameter(Mandatory = $false)]
+        [decimal] $Ceiling = 1
     )
     $return = $null
     
-    switch ($PseduoValue) {
-        "datenow" {
-            $return = (Get-Date -Format "yyyy-mm-ss hh:mm:ss.ffff").ToString()
+    switch ($GeneralValue) {
+        "datetimelong" {
+            $return = (Get-Date -Format "yyyy-MM-dd HH:mm:ss").ToString()
+        }
+        "datetimeshort" {
+            $return = (Get-Date -Format "yyyy-MM-dd HH:mm").ToString()
+        }
+        "date" {
+            $return = (Get-Date -Format "yyyy-MM-dd").ToString()
+        }
+        "timelong" {
+            $return = (Get-Date -Format "HH:mm:ss").ToString()
+        }
+        "timeshort" {
+            $return = (Get-Date -Format "HH:mm").ToString()
         }
         "guid" {
             $return = New-Guid
+        }
+        "rand" {
+            $return = Get-Random -Minimum $Floor -Maximum $Ceiling
         }
         Default {
             $return = $false
@@ -38,18 +57,18 @@ function PseduoValue {
         .SYNOPSIS
         Returns a random (or current) value based on the input type required.
         Defaults to New-Guid if no value supplied.
-        .PARAMETER PseduoValue
-        The Pseduo Value type you want to return
+        .PARAMETER GeneralValue
+        The General Value type you want to return
         .INPUTS
-        None. You can't pipe objects to PseduoValue
+        None. You can't pipe objects to GeneralValue
         .OUTPUTS
         System.String.
         .EXAMPLE
-        PS> $value = PseduoValue
+        PS> $value = GeneralValue
         PS> Write-Host $value
         PS> cfea3ca4-5a5a-4a5c-b14f-d28dcd8778da
         .EXAMPLE
-        PS> $value = PseduoValue("epoch")
+        PS> $value = GeneralValue("epoch")
         PS> Write-Host $value
         PS> cfea3ca4-5a5a-4a5c-b14f-d28dcd8778da
     #>
