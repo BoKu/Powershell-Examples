@@ -5,9 +5,14 @@
 A small PowerShell module for building Windows Forms GUIs without writing WinForms boilerplate.
 Works on Windows PowerShell 5.1 and PowerShell 7+ (Windows only).
 
+Latest release: [v2.0.0](https://github.com/BoKu/Powershell-Examples/releases/tag/v2.0.0).
+Download `FormControls-2.0.0.zip`, unzip it and import the module:
+
 ```powershell
 Import-Module .\FormControls\FormControls.psd1
+```
 
+```powershell
 $form   = New-FormWindow -Title 'Hello' -Size '420,200'
 $name   = New-TextBox -PlaceholderText 'Your name' -Dock Top
 $button = New-Button -Text 'Greet' -Dock Bottom -OnClick { [System.Windows.Forms.MessageBox]::Show("Hi $($name.Text)") | Out-Null }
