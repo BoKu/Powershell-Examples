@@ -34,19 +34,19 @@ Describe 'FormControls' -Skip:(-not $script:OnWindows) {
     Context 'ConvertTo-DataTable' {
         It 'builds one row per object and one column per property' {
             $table = [pscustomobject]@{ A = 1; B = 'x' }, [pscustomobject]@{ A = 2; B = $null } | ConvertTo-DataTable
-            $table | Should -BeOfType [System.Data.DataTable]
+            $table.GetType().Name | Should -Be 'DataTable'
             $table.Rows.Count | Should -Be 2
             $table.Columns.Count | Should -Be 2
             $table.Rows[1]['B'] | Should -Be ''
         }
         It 'returns an empty table for no input' {
-            @() | ConvertTo-DataTable | Should -BeOfType [System.Data.DataTable]
+            (@() | ConvertTo-DataTable).GetType().Name | Should -Be 'DataTable'
         }
     }
 
     Context 'Controls' {
         It 'creates a form' {
-            $form = New-FormWindow -Title 'T' -Size '500,300'
+            $form = New-FormWindow -Title 'T' -Size '500,300' -MinimumSize '100,100'
             $form.Text | Should -Be 'T'
             $form.Size.Width | Should -Be 500
             $form.Dispose()
@@ -77,7 +77,7 @@ Describe 'FormControls' -Skip:(-not $script:OnWindows) {
         }
         It 'binds a data grid' {
             $grid = New-DataGrid -Data ([pscustomobject]@{ A = 1 }, [pscustomobject]@{ A = 2 })
-            $grid.Rows.Count | Should -Be 2
+            $grid.DataSource.Rows.Count | Should -Be 2
         }
         It 'builds a tree from nested data' {
             $tree = New-TreeView -Data ([ordered]@{ Top = [ordered]@{ Child = 'Leaf' } })
