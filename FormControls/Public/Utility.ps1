@@ -38,7 +38,7 @@ function Hide-ConsoleWindow {
     [CmdletBinding()]
     param([switch] $Restore)
     if ($env:WT_SESSION) { return }
-    Initialize-NativeMethods
+    Initialize-NativeMethod
     $handle = [FormControls.NativeMethods]::GetConsoleWindow()
     if ($handle -ne [IntPtr]::Zero) {
         $command = if ($Restore) { 5 } else { 0 }

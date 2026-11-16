@@ -45,7 +45,8 @@ function New-LinkLabel {
     $null = Set-ControlCommon -Control $control -Bound $PSBoundParameters
     $null = $control.Links.Add(0, $control.Text.Length, $Url.AbsoluteUri)
     $control.add_LinkClicked({
-            param($sender, $e)
+            param($eventSender, $e)
+            $null = $eventSender
             $target = [uri]$e.Link.LinkData
             if ($target.Scheme -in 'http', 'https') {
                 $e.Link.Visited = $true

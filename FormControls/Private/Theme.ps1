@@ -75,17 +75,18 @@ function Set-ThemeRecursive {
 function Set-TitleBarTheme {
     # Dark title bar on Windows 10 1809+ / 11. Silently ignored where unsupported.
     param([System.Windows.Forms.Form] $Form, [bool] $Dark)
-    Initialize-NativeMethods
+    Initialize-NativeMethod
     $value = [int]$Dark
     $apply = {
-        param($sender, $e)
-        try { $null = [FormControls.NativeMethods]::DwmSetWindowAttribute($sender.Handle, 20, [ref]$value, 4) }
+        param($eventSender, $e)
+        $null = $e
+        try { $null = [FormControls.NativeMethods]::DwmSetWindowAttribute($eventSender.Handle, 20, [ref]$value, 4) }
         catch { Write-Verbose 'Title bar theme not supported.' }
     }.GetNewClosure()
     if ($Form.IsHandleCreated) { & $apply $Form $null } else { $Form.add_HandleCreated($apply) }
 }
 
-function Initialize-NativeMethods {
+function Initialize-NativeMethod {
     if (-not ('FormControls.NativeMethods' -as [type])) {
         Add-Type -Namespace FormControls -Name NativeMethods -MemberDefinition @'
 [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
