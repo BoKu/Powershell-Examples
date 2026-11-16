@@ -77,7 +77,7 @@ Describe 'FormControls' -Skip:(-not $script:OnWindows) {
         }
         It 'binds a data grid' {
             $grid = New-DataGrid -Data ([pscustomobject]@{ A = 1 }, [pscustomobject]@{ A = 2 })
-            $grid.Rows.Count | Should -Be 2
+            $grid.DataSource.Rows.Count | Should -Be 2
         }
         It 'builds a tree from nested data' {
             $tree = New-TreeView -Data ([ordered]@{ Top = [ordered]@{ Child = 'Leaf' } })
