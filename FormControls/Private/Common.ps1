@@ -6,12 +6,12 @@ function Set-ControlCommon {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)] [System.Windows.Forms.Control] $Control,
-        [Parameter(Mandatory)] [System.Collections.IDictionary] $Bound
+        [Parameter(Mandatory)] $Bound
     )
     foreach ($name in 'Text', 'Location', 'Size', 'Dock', 'Anchor', 'Name') {
-        if ($Bound.Contains($name)) { $Control.$name = $Bound[$name] }
+        if ($Bound.ContainsKey($name)) { $Control.$name = $Bound[$name] }
     }
-    if ($Bound.Contains('Property') -and $Bound['Property']) {
+    if ($Bound.ContainsKey('Property') -and $Bound['Property']) {
         foreach ($key in $Bound['Property'].Keys) { $Control.$key = $Bound['Property'][$key] }
     }
     $Control
